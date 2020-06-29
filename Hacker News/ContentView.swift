@@ -1,4 +1,4 @@
-//
+
 //  ContentView.swift
 //  Hacker News
 //
@@ -9,8 +9,24 @@
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Hello, World!")
+    @ObservedObject var networkManager = NetworkManager()
+	
+	var body: some View {
+		NavigationView {
+			List {
+				
+				ForEach(0..<networkManager.posts.count, id: \.self) { index in
+					HStack {
+						Text("\(self.networkManager.posts[index].points)")
+						Text(self.networkManager.posts[index].title)
+					}
+				}
+			}
+		.navigationBarTitle("Hacker News")
+		}
+		.onAppear {
+			self.networkManager.fetchData()
+		}
     }
 }
 
